@@ -1,0 +1,24 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="header-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="user-menu">
+                    <ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><a asp-controller="Accounts" asp-action="Dashboard"><i class="fa fa-user"></i> My Account</a></li>
+                            <li><a asp-controller="Accounts" asp-action="Logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Accounts" asp-action="Login"><i class="fa fa-sign-in"></i> Login</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End header area -->

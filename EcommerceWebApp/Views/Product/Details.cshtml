@@ -1,0 +1,129 @@
+﻿@model EcommerceWebApp.Models.Product
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var price = Model.Price;
+    if (Model.Discount != null)
+    {
+        price = Model.Price - Model.Price * Model.Discount / 100;
+    }
+    List<Product> relatedProducts = ViewBag.relatedList;
+}
+
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-content-right">
+                    <div class="product-breadcroumb">
+                        <a href="">Home</a>
+                        <a href="">@Model.Cat.CatName</a>
+                        <a href="">@Model.ProductName</a>
+                        <a asp-controller="Product" asp-action="Index">Back to list</a>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="product-images">
+                                <div class="product-main-img">
+                                    <img src="~/images/products/@Model.Thumb" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="product-inner">
+                                <h2 class="product-name">@Model.ProductName</h2>
+                                <div class="product-inner-price">
+                                    <ins>@price.Value.ToString("#,###") VND</ins> <del>@Model.Price.Value.ToString("#,###") VND</del>
+                                </div>
+
+                                <div class="cart">
+                                    <div class="quantity">
+                                        <input id="product_quantity" data="@Model.ProductId" type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" max="@Model.UnitslnStock" step="1">
+                                    </div>
+                                    <button class="add_to_cart_button" type="submit">Add to cart</button>
+                                </div>
+
+                                <div class="product-inner-category">
+                                    <p>Category: <a href="">@Model.Cat.CatName</a>
+                                </div>
+
+                                <div role="tabpanel">
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                            <h2>Product Description</h2>
+                                            <span>@Model.Description</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="related-products-wrapper">
+                        <h2 class="related-products-title">Related Products</h2>
+                        <div class="related-products-carousel">
+                            @if (relatedProducts != null && relatedProducts.Count > 0)
+                            {
+                                foreach (var item in relatedProducts)
+                                {
+                                    var _price = item.Price;
+                                    if (item.Discount != null)
+                                    {
+                                        _price = item.Price - item.Price * item.Discount / 100;
+                                    }
+                                    <div class="single-product">
+                                        <div class="product-f-image">
+                                            <img src="~/images/products/@item.Thumb" alt="">
+                                            <div class="product-hover">
+                                                <a asp-controller="Product" asp-action="Details" asp-route-id=@item.ProductId class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                                <a asp-controller="Product" asp-action="Details" asp-route-id=@item.ProductId class="view-details-link"><i class="fa fa-link"></i> See details</a>
+                                            </div>
+                                        </div>
+
+                                        <h2><a asp-controller="Product" asp-action="Details" asp-route-id=@item.ProductId>@item.ProductName</a></h2>
+
+                                        <div class="product-carousel-price">
+                                            <ins>@_price</ins> <del>@item.Price</del>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("button.add_to_cart_button").click(function () {
+                var quantity = parseInt($("input#product_quantity").val());
+                var productId = parseInt($("input#product_quantity").attr("data"));
+                $.ajax({
+                    url: `/Cart/AddToCart?ProductId=${productId}`,
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        Quantity: quantity
+                    },
+                    success: function (res) {
+                        LoadNumberCart();
+                        window.location.href = res.redirectUrl;
+                    },
+                    error: function () {
+                        alert("Some thing went wrong !!!");
+                    }
+                });
+            });
+        });
+        
+    </script>
+}

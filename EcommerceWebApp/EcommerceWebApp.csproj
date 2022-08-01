@@ -1,0 +1,87 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Shared\Components\**" />
+    <Content Remove="Views\Shared\Components\**" />
+    <EmbeddedResource Remove="Views\Shared\Components\**" />
+    <None Remove="Views\Shared\Components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\ProductController1.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Shared\_ChangePasswordParitalView.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.17">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="PagedList.Core" Version="1.17.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Data\" />
+    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\lib\bootstrap\" />
+    <Folder Include="wwwroot\lib\bootstrap\dist\css\" />
+    <Folder Include="wwwroot\lib\bootstrap\dist\js\" />
+    <Folder Include="wwwroot\lib\jquery-validation-unobtrusive\" />
+    <Folder Include="wwwroot\lib\jquery-validation\" />
+    <Folder Include="wwwroot\lib\jquery-validation\dist\" />
+    <Folder Include="wwwroot\lib\jquery\" />
+    <Folder Include="wwwroot\lib\jquery\dist\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\fonts\material-icon\fonts\Material-Design-Iconic-Font.svg" />
+    <None Include="wwwroot\css\fonts\material-icon\fonts\Material-Design-Iconic-Font.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-300.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-300.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-300italic.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-300italic.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-500.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-500.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-500italic.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-500italic.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-600.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-600.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-700.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-700.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-700italic.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-700italic.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-800.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-800.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-800italic.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-800italic.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-900.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-900.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-italic.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-italic.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-regular.svg" />
+    <None Include="wwwroot\css\fonts\poppins\poppins-v5-latin-regular.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-700.svg" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-700.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-700italic.svg" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-700italic.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-italic.svg" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-italic.woff2" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-regular.svg" />
+    <None Include="wwwroot\css\fonts\poppins\roboto-condensed-v16-latin-regular.woff2" />
+  </ItemGroup>
+
+</Project>

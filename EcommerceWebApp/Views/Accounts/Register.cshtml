@@ -1,0 +1,54 @@
+﻿@model EcommerceWebApp.ModelView.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_SigninSignupLayout.cshtml";
+}
+
+
+    <!-- Sign up form -->
+    <section class="signup">
+        <div class="container">
+            <div class="signup-content">
+                <div class="signup-form">
+                    <h2 class="form-title">Sign up</h2>
+                    <form method="POST" asp-controller="Accounts" asp-action="Register" class="register-form">
+                        <div class="form-group">
+                            <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                            <input type="text" asp-for="FullName" id="name" placeholder="Your Name" required/>
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="zmdi zmdi-email"></i></label>
+                            <input type="email" asp-for="Email" id="email" placeholder="Your Email" required/>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"><i class="zmdi zmdi-phone"></i></label>
+                            <input type="tel" asp-for="Phone" id="phone" placeholder="Phone" required/>
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                            <input type="password" asp-for="Password" id="pass" placeholder="Password" required/>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                            <input type="password" asp-for="ConfirmPassword" id="re_pass" placeholder="Repeat your password" required/>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group form-button">
+                            <input type="submit" id="signup" class="form-submit" value="Register" />
+                        </div>
+                    </form>
+                </div>
+                <div class="signup-image">
+                    <figure><img src="~/images/signup-image.jpg" alt="sing up image"></figure>
+                    <a asp-controller="Accounts" asp-action="Login" class="signup-image-link">I am already member</a>
+                    <a href="/" class="signup-image-link">Return to home page</a>
+                </div>
+            </div>
+        </div>
+    </section>
+

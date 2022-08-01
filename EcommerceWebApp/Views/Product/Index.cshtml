@@ -1,0 +1,139 @@
+﻿@using PagedList.Core
+@model PagedList.Core.IPagedList<Product>
+@{
+    ViewData["Title"] = "Product list page " + ViewBag.CurrentPage;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    @if (ViewBag.CurrentCat != null)
+                    {
+                        <h2 id="headerProduct" data="@ViewBag.CurrentPage">@ViewBag.CurrentCat.CatName page @ViewBag.CurrentPage</h2>
+                    }
+                    else
+                    {
+                        <h2 id="headerProduct" data="@ViewBag.CurrentPage">All page @ViewBag.CurrentPage</h2>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row" style="margin-bottom: 50px">
+            <div class="col-md-2">
+                <select id="CategoryID" name="CatId" class="btn btn-primary" asp-items="ViewBag.Category">
+                    <option value="" disabled selected>Choose category</option>
+                    <option value="0">All</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <input id="keywordProduct" name="keyword" class="form-control border-0" type="text" placeholder="Search">
+            </div>
+        </div>
+        <div id="records_data" class="row">
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    var price = item.Price;
+                    if (item.Discount != null)
+                    {
+                        price = item.Price - item.Price * item.Discount / 100;
+                    }
+                    <div class="col-md-4 col-sm-6">
+                        <div class="single-shop-product">
+                            <div class="product-upper">
+                                <img src="~/images/products/@item.Thumb" alt="@item.Title" style="height: 345px; min-width: 345px">
+                            </div>
+                            <h2><a asp-controller="Product" asp-action="Details" asp-route-id=@item.ProductId>@item.ProductName</a></h2>
+                            <div class="product-carousel-price">
+                                <ins>@price.Value.ToString("#,###") VND</ins> <del>@item.Price.Value.ToString("#,###") VND</del>
+                            </div>
+
+                            <div class="product-option-shop">
+                                <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" asp-controller="Product" asp-action="Details" asp-route-id=@item.ProductId>Add to cart</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-pagination text-center">
+                    <nav>
+                        <ul class="pagination">
+                            <li>
+                                <a asp-controller="Product" asp-action="Index" asp-route-CatId=@ViewBag.CurrentCatId asp-route-page=@(ViewBag.CurrentPage-1) aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Product" asp-action="Index" asp-route-CatId=@ViewBag.CurrentCatId asp-route-page=@(ViewBag.CurrentPage+1) aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        $("#CategoryID").change(function () {
+            var catId = $(this).children(":selected").attr("value");
+            catId = parseInt(catId);
+            $("#CategoryID option").removeAttr("selected");
+            $(`#CategoryID > [value="${catId}"]`).attr("selected", "true");
+            $.ajax({
+                url: "/Product/Filter",
+                method: "GET",
+                dataType: "json",
+                data: {
+                    CatId: catId
+                },
+                async: true,
+                success: function (res) {
+                    if (res.status == 'success') {
+                        window.location.href = res.redirectUrl;
+                    }
+                },
+                error: function () {
+                    alert("Some thing went wrong !!!");
+                }
+            })
+        });
+        $("#keywordProduct").keyup(function () {
+            var keyword = $("#keywordProduct").val();
+            var page = $("h2#headerProduct").attr("data");
+            $.ajax({
+                url: `/Product/FindProduct?page=${page}`,
+                method: "POST",
+                datatype: "json",
+                data: {
+                    keyword: keyword
+                },
+                async: true,
+                success: function (res) {
+                    $("#records_data").html("");
+                    $("#records_data").html(res);
+                }
+            });
+        });
+    });
+    </script>
+}

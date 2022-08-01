@@ -1,0 +1,64 @@
+﻿@model IEnumerable<EcommerceWebApp.Models.Role>
+
+@{
+    ViewData["Title"] = "Quản lí quyền truy cập";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+    {
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    }
+}
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.RoleId)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.RoleName)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">
+                        @Html.DisplayFor(modelItem => item.RoleId)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoleName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.RoleId">Details</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+                            {
+                                <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.RoleId">Edit</a>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.RoleId">Delete</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css">
+    <!-- Font Icon -->
+    <link href="~/css/fonts/material-icon/css/material-design-iconic-font.css" rel="stylesheet" />
+    <!-- Main css -->
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="main">
+
+        @RenderBody()
+
+    </div>
+
+    <!-- JS -->
+    @await Component.InvokeAsync("Notyf")
+</body>
+</html>

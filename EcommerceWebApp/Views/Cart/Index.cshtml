@@ -1,0 +1,109 @@
+﻿@model List<OrderDetail>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="single-product-area">
+    <div class="zigzag-bottom"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-content-right">
+                    <div class="woocommerce">
+                        <form method="post" action="#">
+                            <table cellspacing="0" class="shop_table cart">
+                                <thead>
+                                    <tr>
+                                        <th class="product-remove">&nbsp;</th>
+                                        <th class="product-thumbnail">&nbsp;</th>
+                                        <th class="product-name">Product</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-subtotal">Total</th>
+                                        <th class="product-subtotal">Order date</th>
+                                        <th class="product-subtotal">Transaction Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cart-data">
+                                    @if (Model != null && Model.Count() > 0)
+                                    {
+                                        foreach (var item in Model)
+                                        {
+                                            <tr class="cart_item">
+                                                <td class="product-remove">
+                                                    <a data="@item.OrderDetailId" title="Remove this item" class="remove-item" style="cursor: pointer;">×</a>
+                                                </td>
+                                                <td class="product-thumbnail">
+                                                    <img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="~/images/products/@item.Product.Thumb">
+                                                </td>
+
+                                                <td class="product-name">
+                                                    <span>@item.Product.ProductName</span>
+                                                </td>
+
+                                                <td class="product-price">
+                                                    <span class="amount">@((item.Total/item.Quantity).Value.ToString("#,###")) VND</span>
+                                                </td>
+
+                                                <td class="product-quantity">
+                                                    <div class="quantity buttons_added">
+                                                        <input disabled type="number" size="4" class="input-text qty text" title="Qty" value="@item.Quantity">
+                                                    </div>
+                                                </td>
+
+                                                <td class="product-subtotal">
+                                                    <span class="amount">@item.Total.Value.ToString("#,###") VND</span>
+                                                </td>
+                                                <td class="product-subtotal">
+                                                    <span class="amount">@item.Order.OrderDate</span>
+                                                </td>
+                                                <td class="product-subtotal">
+                                                    <span class="amount">@item.Order.TransactStatus.Description</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="actions" colspan="1">
+                                                    <a asp-controller="CheckOut" asp-action="Index" asp-route-OrderId=@item.OrderId class="btn btn-primary">Check out</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("a.remove-item").click(function () {
+                var oderDetailId = parseInt($(this).attr("data"));
+                $.ajax({
+                    url: "/Cart/RemoveItem",
+                    method: "POST",
+                    datatype: "json",
+                    async: false,
+                    data: {
+                        OrderDetailId: oderDetailId
+                    },
+                    success: function (res) {
+                        $("#cart-data").html("")
+                        $("#cart-data").html(res);
+                        LoadNumberCart();
+                        window.location.href = "/Cart";
+                    },
+                    error: function () {
+                        alert("Some thing went wrong !!!");
+                    }
+                })
+            });
+        });
+    </script>
+}
+

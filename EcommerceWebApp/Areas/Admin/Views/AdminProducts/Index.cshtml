@@ -1,0 +1,152 @@
+﻿@using PagedList.Core
+@model PagedList.Core.IPagedList<Product>
+
+@{
+    int currentPage = ViewBag.CurrentPage;
+    ViewData["Title"] = "Admin products list page " + currentPage;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1 id="header" data="@currentPage">@ViewData["Title"]</h1>
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <select id="CatId" name="CatId" class="btn btn-primary" asp-items="ViewBag.Category">
+                <option value="" disabled selected>Choose category</option>
+                <option value="0">All</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <input id="keyword" name="keyword" class="form-control border-0" type="text" placeholder="Search">
+        </div>
+    </div>
+</div>
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Product name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="records_data">
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Cat.CatName</td>
+                    <td>@item.Price.Value.ToString("#,##0") VND</td>
+                    <td>@item.UnitslnStock</td>
+                    <td>
+                        @if (item.UnitslnStock.Value > 0)
+                        {
+                            <p class="text-success">In stock</p>
+                        }
+                        else
+                        {
+                            <p class="text-danger">Out of stock</p>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+                            {
+                                <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-md-12">
+        <div class="product-pagination text-center">
+            <nav>
+                <ul class="pagination">
+                    <li style="width: 80px; padding : 20px">
+                        <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Index" asp-route-CatId=@ViewBag.CurrentCatId asp-route-page=@(ViewBag.CurrentPage-1) aria-label="Previous">
+                            Previous
+                        </a>
+                    </li>
+                    <li style="width: 80px; padding : 20px">
+                        <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Index" asp-route-CatId=@ViewBag.CurrentCatId asp-route-page=@(ViewBag.CurrentPage+1) aria-label="Next">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#CatId").change(function () {
+                var catId = $(this).children(":selected").attr("value");
+                catId = parseInt(catId);
+                $("#CatId option").removeAttr("selected");
+                $(`#CatId > [value="${catId}"]`).attr("selected", "true");
+                $.ajax({
+                    url: "/Admin/AdminProducts/Filter",
+                    method: "GET",
+                    dataType: "json",
+                    data: {
+                        CatId: catId
+                    },
+                    async: true,
+                    success: function (res) {
+                        if (res.status == 'success') {
+                            window.location.href = res.redirectUrl;
+                        }
+                    },
+                    error: function () {
+                        alert("Some thing went wrong !!!");
+                    }
+                })
+            });
+            $("#keyword").keyup(function () {
+                var keyword = $("#keyword").val();
+                var page = $("h1#header").attr("data");
+                $.ajax({
+                    url: `/Admin/Search/FindProduct?page=${page}`,
+                    method: "POST",
+                    datatype: "json",
+                    data: {
+                        keyword: keyword
+                    },
+                    async: true,
+                    success: function (res) {
+                        $("#records_data").html("");
+                        $("#records_data").html(res);
+                    },
+                    error: function (xhr) {
+                        alert("Not found !!!");
+                    }
+                });
+            });
+        });
+    </script>
+}

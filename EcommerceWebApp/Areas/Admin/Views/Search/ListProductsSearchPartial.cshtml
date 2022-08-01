@@ -1,0 +1,30 @@
+﻿@model List<Product>
+@if (Model != null)
+{
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.ProductId</td>
+            <td>@item.ProductName</td>
+            <td>@item.Cat.CatName</td>
+            <td>@item.Price.Value.ToString("#,##0") VND</td>
+            <td>@item.UnitslnStock</td>
+            <td>
+                @if (item.UnitslnStock.Value > 0)
+                {
+                    <p class="text-success">In stock</p>
+                }
+                else
+                {
+                    <p class="text-danger">Out of stock</p>
+                }
+            </td>
+            <td>
+                <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
+                <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                <a asp-area="Admin" asp-controller="AdminProducts" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+            </td>
+        </tr>
+    }
+}
+

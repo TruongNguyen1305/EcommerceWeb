@@ -1,0 +1,59 @@
+﻿@using PagedList.Core
+@model PagedList.Core.IPagedList<Customer>
+@{
+    int currentPage = ViewBag.CurrentPage;
+    ViewData["Title"] = "Customer List " + currentPage;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Address</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.CustomerId</td>
+                    <td>
+                        <p>@item.FullName</p>
+                        <p>@item.Phone</p>
+                        <p>@item.Email</p>
+                    </td>
+                    <td>@item.Address</td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.CustomerId">Details</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+                            {
+                                <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

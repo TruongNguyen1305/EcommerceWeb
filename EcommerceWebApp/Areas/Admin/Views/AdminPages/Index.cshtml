@@ -1,0 +1,84 @@
+﻿@using PagedList.Core
+@model PagedList.Core.IPagedList<Page>
+@{
+    int currentPage = ViewBag.CurrentPage;
+    ViewData["Title"] = "Pages List " + currentPage;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<h1>@ViewData["Title"]</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="product-pagination text-center">
+            <nav>
+                <ul class="pagination">
+                    <li style="width: 80px; padding : 20px">
+                        <a asp-area="Admin" asp-controller="AdminPages" asp-action="Index" asp-route-page=@(currentPage-1) aria-label="Previous">
+                            Previous
+                        </a>
+                    </li>
+                    <li style="width: 80px; padding : 20px">
+                        <a asp-area="Admin" asp-controller="AdminPages" asp-action="Index" asp-route-page=@(currentPage+1) aria-label="Next">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Page Name</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PageId</td>
+                    <td>@item.PageName</td>
+                    <td>
+                        @if (item.Published)
+                        {
+                            <p class="text-success">public</p>
+                        }
+                        else
+                        {
+                            <p class="text-danger">private</p>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.PageId">Details</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.Claims.FirstOrDefault(x => x.Type == "Role").Value == "Admin")
+                            {
+                                <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.PageId">Edit</a>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.PageId">Delete</a>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
